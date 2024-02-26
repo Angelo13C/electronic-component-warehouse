@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title>Drawers | ECW</title>
+</head>
+<body>
+	
+	<div class="overlay-menu">
+	    <div class="menu-content">
+	    	<ul class="list-container">
+		        <li th:each="item : ${items}">
+		            <span class="rounded-background" th:text="${item}"></span>
+		        </li>
+		    </ul>
+	    </div>
+	</div>
+	
+	<div class="top-bar">
+        <ul class="menu">
+            <li class="selected"><a href="drawers"><b>DRAWERS</b></a></li>
+            <li><a href="items"><b>ITEMS</b></a></li>
+            <li><a href="tags"><b>TAGS</b></a></li>
+        </ul>
+    </div>
+    
+    <h3>Drawers are container of items. Add an item to an empty drawer by clicking on it, 
+    remove an item from a non-empty drawer by clicking on it.</h3>
+    
+    <form action="/search" method="GET" id="searchForm">
+        <input type="text" id="search" name="q"  autocomplete="off" 
+        	   placeholder="Filter the drawers based on a list of tags separated by dashes (example: SMD - Resistor)...">
+    </form>
+    
+    <table>
+	    <thead>
+	        <tr>
+	        	<td></td>
+	            <td style="color: white;">1</td>
+	            <td style="color: white;">2</td>
+	            <td style="color: white;">3</td>
+	            <td style="color: white;">4</td>
+	            <td style="color: white;">5</td>
+	            <td style="color: white;">6</td>
+	            <td style="color: white;">7</td>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:each="row : ${rows}">
+	        	<td style="color: white;" th:text="${row.number}"></td>
+	            <td th:class="'bordered-text ' + ${row.cell1Style}" th:text="${row.cell1}"
+             		th:attr="onclick='cellClicked(' + ${row.number} + ', 1)'"></td>
+	            <td th:class="'bordered-text ' + ${row.cell2Style}" th:text="${row.cell2}"
+	            	th:attr="onclick='cellClicked(' + ${row.number} + ', 2)'"></td>
+	            <td th:class="'bordered-text ' + ${row.cell3Style}" th:text="${row.cell3}"
+	            	th:attr="onclick='cellClicked(' + ${row.number} + ', 3)'"></td>
+	            <td th:class="'bordered-text ' + ${row.cell4Style}" th:text="${row.cell4}"
+	            	th:attr="onclick='cellClicked(' + ${row.number} + ', 4)'"></td>
+	            <td th:class="'bordered-text ' + ${row.cell5Style}" th:text="${row.cell5}"
+	            	th:attr="onclick='cellClicked(' + ${row.number} + ', 5)'"></td>
+	            <td th:class="'bordered-text ' + ${row.cell6Style}" th:text="${row.cell6}"
+	            	th:attr="onclick='cellClicked(' + ${row.number} + ', 6)'"></td>
+	            <td th:class="'bordered-text ' + ${row.cell7Style}" th:text="${row.cell7}"
+	            	th:attr="onclick='cellClicked(' + ${row.number} + ', 7)'"></td>
+	        </tr>
+	    </tbody>
+	</table>
+	
+	<script th:inline="javascript">
+	    function cellClicked(row, column) {
+	        const url = '/click-drawer';
+
+			const options = {
+			  method: 'POST',
+			  headers: {
+			    'Content-Type': 'application/json'
+			  },
+			  body: "{ \"x\": " + column + ", \"y\": " + row + " }"
+			};
+	        fetch(url, options);
+	    }
+	</script>
+</body>
+</html>

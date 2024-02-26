@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title>Items | ECW</title>
+</head>
+<body>
+	<div class="overlay-menu show">
+	    <div class="menu-content">
+	    	<ul class="list-container">
+		        <li th:each="tag : ${tags}">
+		            <span class="rounded-background" th:text="${tag}"></span>
+		        </li>
+		    </ul>
+	    </div>
+	</div>
+	
+	<div class="top-bar">
+        <ul class="menu">
+            <li><a href="drawers"><b>DRAWERS</b></a></li>
+            <li class="selected"><a href="items"><b>ITEMS</b></a></li>
+            <li><a href="tags"><b>TAGS</b></a></li>
+        </ul>
+    </div>
+    
+    <h3>Drawers are container of items. Add an item to an empty drawer by clicking on it, 
+    remove an item from a non-empty drawer by clicking on it.</h3>
+    
+    <form action="/search" method="GET" id="searchForm">
+        <input type="text" id="search" name="q"  autocomplete="off" 
+        	   placeholder="Filter the drawers based on a list of tags separated by dashes (example: SMD - Resistor)...">
+    </form>
+    
+   	<ul class="list-container">
+        <li>
+            <span class="rounded-unfilled-background create-button">+</span>
+        </li>
+        <li th:each="item : ${items}">
+            <span class="rounded-background delete-button" th:text="${item}"
+            	th:item-tags="${item}" 
+            	th:onclick="itemClicked(this.getAttribute('item-tags'))"></span>
+        </li>
+    </ul>
+
+	
+	<script th:inline="javascript">
+	    async function itemClicked(item) {
+	    	tags = item.replace(" - ", "\",\"");
+	    	
+	        const url = '/delete-item';
+
+			const options = {
+			  method: 'DELETE',
+			  headers: {
+			    'Content-Type': 'application/json'
+			  },
+			  body: "{ \"tags\": [ \"" + tags + "\" ] }"
+			};
+	        await fetch(url, options);
+	        location.reload();
+	    }
+	</script>
+</body>
+</html>
