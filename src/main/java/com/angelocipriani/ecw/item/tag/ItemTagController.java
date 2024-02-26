@@ -3,6 +3,7 @@ package com.angelocipriani.ecw.item.tag;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,4 +35,14 @@ public class ItemTagController {
 		ItemTag tag = this.mapper.toItemTag(tagDTO);
 		service.addItemTag(tag);
 	}
+
+    @DeleteMapping
+    public void deleteTag(@RequestBody ItemTagDTO tagDTO) {
+		ItemTag tagToDelete = this.mapper.toItemTag(tagDTO);
+		for(ItemTag tag : service.getItemTags())
+		{
+			if(tag.getLabel().equals(tagToDelete.getLabel()))
+				service.deleteItemTag(tag);
+		}		
+    }
 }

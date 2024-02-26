@@ -22,7 +22,11 @@ public class ItemTagService {
 
 	public void addItemTag(ItemTag tag)
 	{
-		System.out.println(tag);
 		repository.save(tag);
+	}
+	
+	public void deleteItemTag(ItemTag tag)
+	{
+		repository.delete(tag);
 	}
 }
